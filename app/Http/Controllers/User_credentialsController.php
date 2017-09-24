@@ -9,10 +9,10 @@ use Illuminate\Support\Facades\Auth;
 class User_credentialsController extends Controller
 {
     /*
-     * Tipos de permisos posibles:
+     * Types possibles of permissions:
      * 
-     * 1: Admin: * (* significa todo, tiene acceso a todo) 
-     * 2: cualquier otro usuario, la lista según la ruta solicitada.
+     * 1: Admin: * (* means all, full access) 
+     * 2: any other profile, the list by the route requested.
      * */
     public static function has_permision($function_name){
     	$user = Auth::user();

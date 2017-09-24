@@ -43,18 +43,18 @@ class User_profilesController extends Controller
 	}
 	
 	public function insertProfile(Request $request){
-			//se inserta la información del nombre y descripcion del perfil de usuario
+			//first we insert the name and the description of the profile
 			if(count($request->input("credential"))==0)
-				return redirect()->back()->withInput()->with("message",array("data"=>"Favor asignar al menos una credencial al perfil","type"=>"danger"));
+				return redirect()->back()->withInput()->with("message",array("data"=>"Plase assign at least one credential to the profile","type"=>"danger"));
 			$profile = new User_profile;
 			
 			$profile->profile_name = $request->input("profile_name");
 			$profile->profile_description = $request->input("profile_description");
 			
-			$message = array("data"=>"Perfil agregado con éxito.","type"=>"success");
+			$message = array("data"=>"Profile added.","type"=>"success");
 			
 			try{
-				//se insertan las funcionalidades asociadas a ese perfil de usuario junto con su vinculo al perfil de usuario
+				//later, the functionalities to the profile are linked 
 				$profile->save();
 				foreach($request->input("credential") as $credential){
 					$user_credential = User_credential::firstOrCreate(["function_name"=>$credential]);
@@ -64,7 +64,6 @@ class User_profilesController extends Controller
 				}				
 			}catch(\Illuminate\Database\QueryException $ex){				
 				$message = array("data"=>"Excepcion al intentar ingresar los datos", "type"=>"danger");
-				//deberemos generar una clase para almacenar las excepciones de IO en la BD para gestionarlas a posterior
 			}
 			
 			return $this->getList($message);
@@ -76,7 +75,6 @@ class User_profilesController extends Controller
 	}
 	
 	public function updateProfile($id, Request $request){
-		//se inserta la información del nombre y descripcion del perfil de usuario
 		if(count($request->input("credential"))==0)
 			return redirect()->back()->withInput()->with("message",array("data"=>"Favor asignar al menos una credencial al perfil","type"=>"danger"));
 			$profile = User_profile::findOrFail($id);
@@ -84,10 +82,10 @@ class User_profilesController extends Controller
 			$profile->profile_name = $request->input("profile_name");
 			$profile->profile_description = $request->input("profile_description");
 			
-			$message = array("data"=>"Perfil modificado con éxito.","type"=>"success");
+			$message = array("data"=>"Profile modified.","type"=>"success");
 			
 			try{
-				//se insertan las funcionalidades asociadas a ese perfil de usuario junto con su vinculo al perfil de usuario
+				//FIRST WE DELETE ALL OLD CREDENTIALS BEFORE CHARGE THE NEW PERMISSIONS
 				$profile->save();
 				Profile_credential::where("id_user_profile",$profile->id)->delete();
 				
@@ -98,41 +96,38 @@ class User_profilesController extends Controller
 					$profile_credential->fill(["id_user_profile"=>$profile->id,"id_user_credential"=>$user_credential->id,"credential"=>1])->save();
 				}
 			}catch(\Illuminate\Database\QueryException $ex){
-				$message = array("data"=>"Excepcion al intentar ingresar los datos", "type"=>"danger");
-				//deberemos generar una clase para almacenar las excepciones de IO en la BD para gestionarlas a posterior
+				$message = array("data"=>"Exception trying insert the data", "type"=>"danger");
 			}
 			
 			return $this->getList($message);
 	}
 	
 	public function deleteProfile($id, Request $request){
-		$message = array("data"=>"Perfil eliminado con éxito","type"=>"success");
+		$message = array("data"=>"Profile deleted","type"=>"success");
 		if($request->input("profile_id") == "delete"){
-			//borrar usuarios
+			//delete users option
 			try{
-				//se insertan las funcionalidades asociadas a ese perfil de usuario junto con su vinculo al perfil de usuario
 				$profile = User_profile::findOrFail($id);
+				
+				if($profile->profile_name == "admin") return redirect()->back()->with(array("message"=>array("data"=>"Admin profile could not be deleted", "type"=>"danger"))); 
 				User::where("user_profile_id",$id)->delete();
 				Profile_credential::where("id_user_profile",$profile->id)->delete();
 				$profile->delete();
 			}catch(\Illuminate\Database\QueryException $ex){
-				$message = array("data"=>"Excepcion al intentar ingresar los datos", "type"=>"danger");
-				//deberemos generar una clase para almacenar las excepciones de IO en la BD para gestionarlas a posterior
+				$message = array("data"=>"Exception trying delete the profile ".$ex, "type"=>"danger");
 			}
 			
 		}else{
-			//asignar usuarios a perfil
+			//transfer user to another profile option
 			try{
 				$profile = User_profile::findOrFail($id);
 				User::where("user_profile_id",$id)->update(["user_profile_id"=>$request->input("profile_id")]);
 				Profile_credential::where("id_user_profile",$profile->id)->delete();
 				$profile->delete();
 			}catch(\Illuminate\Database\QueryException $ex){
-				$message = array("data"=>"Excepcion al intentar ingresar los datos", "type"=>"danger");
-				//deberemos generar una clase para almacenar las excepciones de IO en la BD para gestionarlas a posterior
+				$message = array("data"=>"Excepcion trying modify the data ".$ex, "type"=>"danger");
 			}
 		}
 		return redirect("profiles")->withInput()->with("message",$message);
-		//return $this->getList($message);
 	}
 }
