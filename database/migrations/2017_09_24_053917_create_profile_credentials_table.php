@@ -13,9 +13,14 @@ class CreateProfileCredentialsTable extends Migration
      */
     public function up()
     {
-        Schema::create('profiles_credentials', function (Blueprint $table) {
+        Schema::create('profile_credentials', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('id_user_profile')->unsigned();
+            $table->integer('id_user_credential')->unsigned();
+            $table->integer('credential');
             $table->timestamps();
+            $table->foreign('id_user_profile')->references('id')->on('user_profiles');
+            $table->foreign('id_user_credential')->references('id')->on('user_credentials');
         });
     }
 

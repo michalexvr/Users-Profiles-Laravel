@@ -15,6 +15,7 @@ class CreateUserCredentialsTable extends Migration
     {
         Schema::create('user_credentials', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('function_name');
             $table->timestamps();
         });
     }
