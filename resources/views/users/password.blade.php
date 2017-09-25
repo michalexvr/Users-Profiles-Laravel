@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="">
+<div class="panel panel-default col-md-8 col-md-offset-2">
 	<div class="page-title">
 		<div class="title_left">
 			<h3>Change password to user {{ $user->name }}</h3>
