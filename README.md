@@ -37,13 +37,11 @@ $ php artisan migrate
 $ php artisan db:seed
 ```
 ### Users seeded
-| User | Password |
-| admin@system.dom | admin |
+
 |Email|Password|Access|
 |:------------|:------------|:------------|
 |user@user.com|password|User Access|
 |admin@admin.com|password|Admin Access|
-
 
 
 ### Profiles seeded
