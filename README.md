@@ -38,10 +38,9 @@ $ php artisan db:seed
 ```
 ### Users seeded
 
-|Email|Password|Access|
+|Email|Password|Profile|
 |:------------|:------------|:------------|
-|user@user.com|password|User Access|
-|admin@admin.com|password|Admin Access|
+| admin@system.dom | admin | admin |
 
 
 ### Profiles seeded
