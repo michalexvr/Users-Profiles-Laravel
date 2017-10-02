@@ -45,9 +45,9 @@ $ php artisan db:seed
 
 ### Profiles seeded
 
-|Profile Name|Description|
-|:------------|:------------|
-|admin|System Administrator|
+|Profile Name|Description|Access|
+|:------------|:------------|:------------|
+|admin|System Administrator|* (all)|
 
 
 And just use it!
