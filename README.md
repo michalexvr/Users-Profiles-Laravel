@@ -36,4 +36,18 @@ $ php artisan migrate:install
 $ php artisan migrate
 $ php artisan db:seed
 ```
+### Users seeded
+
+|Email|Password|Profile|
+|:------------|:------------|:------------|
+| admin@system.dom | admin | admin |
+
+
+### Profiles seeded
+
+|Profile Name|Description|Access|
+|:------------|:------------|:------------|
+|admin|System Administrator|* (all)|
+
+
 And just use it!
